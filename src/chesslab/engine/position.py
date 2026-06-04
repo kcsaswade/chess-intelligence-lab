@@ -33,9 +33,32 @@ class Position:
         """Set a piece at a square index."""
         self.board[square] = piece
 
+    def remove_piece(self, square: SquareIndex) -> Piece | None:
+        """Remove and return the piece from a square."""
+        piece = self.board[square]
+        self.board[square] = None
+        return piece
+
+    def move_piece(self, from_sq: SquareIndex, to_sq: SquareIndex) -> Piece:
+        """Move a piece from one square to another and return it."""
+        piece = self.board[from_sq]
+        if piece is None:
+            raise ValueError(f"No piece at source square {from_sq}")
+        self.board[from_sq] = None
+        self.board[to_sq] = piece
+        return piece
+
+    def set_en_passant_square(self, square: SquareIndex | None) -> None:
+        """Set the en passant target square."""
+        self.en_passant_square = square
+
     def rank_file_of(self, square: SquareIndex) -> tuple[int, int]:
         """Return zero-based rank/file for a square."""
         return index_to_rank_file(square)
+
+    def validate_basic_integrity(self) -> None:
+        """Validate basic board-shape invariants."""
+        validate_board_squares(self.board)
 
     def copy_shallow(self) -> Position:
         """Return a shallow copy of the position state."""

@@ -19,3 +19,6 @@ class FenError(ChessLabError):
 
 class InvalidSquareError(ChessLabError):
     """Raised when a square coordinate or square index is invalid."""
+
+class InvalidMoveError(ChessLabError):
+    """Raised when an internal move application assumption is violated."""
