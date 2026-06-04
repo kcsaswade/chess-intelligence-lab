@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chess-intelligence-lab"
+version = "0.1.0"
+description = "Chess Intelligence Laboratory: a staged chess engine, GUI, telemetry, and experimentation platform."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "Your Name" }
+]
+license = { text = "MIT" }
+keywords = ["chess", "engine", "pyside6", "minimax", "alpha-beta", "telemetry"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Games/Entertainment :: Board Games",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+  "PySide6>=6.7,<7.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.5.0",
+  "mypy>=1.10"
+]
+
+[project.scripts]
+chesslab = "chesslab.cli.main:main"
+
+[project.gui-scripts]
+chesslab-gui = "chesslab.gui.app:main"
+
+[project.urls]
+Homepage = "https://github.com/your-username/chess-intelligence-lab"
+Repository = "https://github.com/your-username/chess-intelligence-lab"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["chesslab*"]

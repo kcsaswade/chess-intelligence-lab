@@ -1,0 +1,1 @@
+"""GUI package for Chess Intelligence Laboratory."""

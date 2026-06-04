@@ -1,0 +1,1 @@
+"""Engine package placeholder for future chess core modules."""
