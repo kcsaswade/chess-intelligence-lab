@@ -3,3 +3,5 @@
 from typing import TypeAlias
 
 SquareIndex: TypeAlias = int
+BoardIndex: TypeAlias = int
+FenString: TypeAlias = str
