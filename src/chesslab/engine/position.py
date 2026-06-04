@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from chesslab.constants import BOARD_SIZE
-from chesslab.engine.board import validate_board_squares
+from chesslab.engine.board import index_to_rank_file, validate_board_squares
 from chesslab.engine.castling import CastlingRights
 from chesslab.engine.piece import Color, Piece
 from chesslab.types import SquareIndex
@@ -32,6 +32,10 @@ class Position:
     def set_piece(self, square: SquareIndex, piece: Piece | None) -> None:
         """Set a piece at a square index."""
         self.board[square] = piece
+
+    def rank_file_of(self, square: SquareIndex) -> tuple[int, int]:
+        """Return zero-based rank/file for a square."""
+        return index_to_rank_file(square)
 
     def copy_shallow(self) -> Position:
         """Return a shallow copy of the position state."""

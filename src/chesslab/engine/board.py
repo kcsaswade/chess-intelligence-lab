@@ -49,6 +49,11 @@ def index_to_coord(index: int) -> str:
     return f"{BOARD_FILES[file]}{rank + 1}"
 
 
+def is_valid_rank_file(rank: int, file: int) -> bool:
+    """Return whether zero-based rank/file lies on the board."""
+    return 0 <= rank < 8 and 0 <= file < 8
+
+
 def validate_board_squares(board: Sequence[object | None]) -> None:
     """Validate a board-like sequence has exactly 64 entries."""
     if len(board) != BOARD_SIZE:
