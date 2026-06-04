@@ -56,6 +56,14 @@ class Position:
         """Return zero-based rank/file for a square."""
         return index_to_rank_file(square)
 
+    def squares_occupied_by(self, color: Color) -> list[int]:
+        """Return square indices occupied by the given color."""
+        return [
+            square
+            for square, piece in enumerate(self.board)
+            if piece is not None and piece.color is color
+        ]
+
     def validate_basic_integrity(self) -> None:
         """Validate basic board-shape invariants."""
         validate_board_squares(self.board)
