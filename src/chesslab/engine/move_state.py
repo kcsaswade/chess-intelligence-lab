@@ -19,3 +19,6 @@ class MoveUndoInfo:
     previous_halfmove_clock: int
     previous_fullmove_number: int
     previous_side_to_move: Color
+    en_passant_captured_square: int | None = None
+    castling_rook_from: int | None = None
+    castling_rook_to: int | None = None

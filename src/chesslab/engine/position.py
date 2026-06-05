@@ -96,3 +96,17 @@ class Position:
         from chesslab.io.fen import to_fen
 
         return to_fen(self)
+    
+    def occupied_squares(self) -> list[int]:
+        """Return all occupied square indices."""
+        return [square for square, piece in enumerate(self.board) if piece is not None]
+
+    def board_key(self) -> tuple[str, ...]:
+        """Return a board-only repetition-friendly piece layout key."""
+        entries: list[str] = []
+        for piece in self.board:
+            if piece is None:
+                entries.append(".")
+            else:
+                entries.append(f"{piece.color.value}{piece.kind.value}")
+        return tuple(entries)

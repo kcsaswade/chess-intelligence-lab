@@ -25,7 +25,7 @@ def _promotion_pieces() -> tuple[PieceType, ...]:
 
 
 def generate_pawn_moves(position: Position, from_sq: int) -> list[Move]:
-    """Generate pseudo-legal pawn moves from a square, excluding en passant."""
+    """Generate pseudo-legal pawn moves from a square, including en passant."""
     piece = position.piece_at(from_sq)
     if piece is None or piece.kind is not PieceType.PAWN:
         return []
@@ -80,20 +80,28 @@ def generate_pawn_moves(position: Position, from_sq: int) -> list[Move]:
             continue
 
         to_sq = rank_file_to_index(target_rank, target_file)
-        if not is_enemy_piece(position, to_sq, piece.color):
-            continue
-
-        if target_rank == promotion_rank:
-            for promotion_piece in _promotion_pieces():
-                moves.append(
-                    Move(
-                        from_sq=from_sq,
-                        to_sq=to_sq,
-                        promotion=promotion_piece,
-                        is_capture=True,
+        if is_enemy_piece(position, to_sq, piece.color):
+            if target_rank == promotion_rank:
+                for promotion_piece in _promotion_pieces():
+                    moves.append(
+                        Move(
+                            from_sq=from_sq,
+                            to_sq=to_sq,
+                            promotion=promotion_piece,
+                            is_capture=True,
+                        )
                     )
+            else:
+                moves.append(Move(from_sq=from_sq, to_sq=to_sq, is_capture=True))
+
+        if position.en_passant_square == to_sq:
+            moves.append(
+                Move(
+                    from_sq=from_sq,
+                    to_sq=to_sq,
+                    is_capture=True,
+                    is_en_passant=True,
                 )
-        else:
-            moves.append(Move(from_sq=from_sq, to_sq=to_sq, is_capture=True))
+            )
 
     return moves

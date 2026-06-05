@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from chesslab.engine.board import is_valid_rank_file, rank_file_to_index
 from chesslab.engine.move import Move
+from chesslab.engine.move_generation.castling_moves import generate_castling_moves
 from chesslab.engine.move_generation.filters import is_enemy_piece, is_own_piece
 from chesslab.engine.position import Position
 
@@ -20,7 +21,7 @@ KING_OFFSETS: tuple[tuple[int, int], ...] = (
 
 
 def generate_king_moves(position: Position, from_sq: int) -> list[Move]:
-    """Generate pseudo-legal king moves from a square."""
+    """Generate pseudo-legal king moves from a square, including castling."""
     piece = position.piece_at(from_sq)
     if piece is None:
         return []
@@ -47,4 +48,5 @@ def generate_king_moves(position: Position, from_sq: int) -> list[Move]:
             )
         )
 
+    moves.extend(generate_castling_moves(position, from_sq))
     return moves

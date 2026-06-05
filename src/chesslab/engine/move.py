@@ -19,3 +19,7 @@ class Move:
     is_castling: bool = False
     is_en_passant: bool = False
     is_double_pawn_push: bool = False
+
+    def is_promotion(self) -> bool:
+        """Return whether this move is a promotion."""
+        return self.promotion is not None

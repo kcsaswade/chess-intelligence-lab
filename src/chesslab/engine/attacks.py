@@ -15,10 +15,7 @@ def _pawn_attacks_square(position: Position, square: int, by_color: Color) -> li
     target_rank, target_file = position.rank_file_of(square)
     attackers: list[int] = []
 
-    if by_color is Color.WHITE:
-        candidate_offsets = ((-1, -1), (-1, 1))
-    else:
-        candidate_offsets = ((1, -1), (1, 1))
+    candidate_offsets = ((-1, -1), (-1, 1)) if by_color is Color.WHITE else ((1, -1), (1, 1))
 
     for rank_delta, file_delta in candidate_offsets:
         rank = target_rank + rank_delta
@@ -70,44 +67,56 @@ def _king_attacks_square(position: Position, square: int, by_color: Color) -> li
     return attackers
 
 
-def _slider_attacks_square(
+def _scan_slider_attackers(
     position: Position,
     square: int,
     by_color: Color,
+    directions: tuple[tuple[int, int], ...],
+    valid_kinds: set[PieceType],
 ) -> list[int]:
     target_rank, target_file = position.rank_file_of(square)
     attackers: list[int] = []
 
-    for rank_delta, file_delta in ROOK_DIRECTIONS:
+    for rank_delta, file_delta in directions:
         rank = target_rank + rank_delta
         file = target_file + file_delta
+
         while is_valid_rank_file(rank, file):
             from_sq = rank_file_to_index(rank, file)
             piece = position.piece_at(from_sq)
+
             if piece is None:
                 rank += rank_delta
                 file += file_delta
                 continue
 
-            if piece.color is by_color and piece.kind in {PieceType.ROOK, PieceType.QUEEN}:
+            if piece.color is by_color and piece.kind in valid_kinds:
                 attackers.append(from_sq)
             break
 
-    for rank_delta, file_delta in BISHOP_DIRECTIONS:
-        rank = target_rank + rank_delta
-        file = target_file + file_delta
-        while is_valid_rank_file(rank, file):
-            from_sq = rank_file_to_index(rank, file)
-            piece = position.piece_at(from_sq)
-            if piece is None:
-                rank += rank_delta
-                file += file_delta
-                continue
+    return attackers
 
-            if piece.color is by_color and piece.kind in {PieceType.BISHOP, PieceType.QUEEN}:
-                attackers.append(from_sq)
-            break
 
+def _slider_attacks_square(position: Position, square: int, by_color: Color) -> list[int]:
+    attackers: list[int] = []
+    attackers.extend(
+        _scan_slider_attackers(
+            position,
+            square,
+            by_color,
+            ROOK_DIRECTIONS,
+            {PieceType.ROOK, PieceType.QUEEN},
+        )
+    )
+    attackers.extend(
+        _scan_slider_attackers(
+            position,
+            square,
+            by_color,
+            BISHOP_DIRECTIONS,
+            {PieceType.BISHOP, PieceType.QUEEN},
+        )
+    )
     return attackers
 
 
