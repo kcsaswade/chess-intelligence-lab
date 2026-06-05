@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from time import perf_counter
 
-from chesslab.engine.eval.evaluator import evaluate_position
+from chesslab.engine.eval.evaluator import evaluate
 from chesslab.engine.eval.result import EvaluationResult
 from chesslab.engine.piece import Color
 from chesslab.engine.position import Position
@@ -16,10 +16,18 @@ from chesslab.engine.search.stats import SearchStats
 from chesslab.engine.search.tracker import SearchTracker
 
 
-def _evaluation_from_score(position: Position, score: int) -> EvaluationResult:
+def _to_side_to_move_pov(position: Position, evaluation: EvaluationResult) -> EvaluationResult:
     if position.side_to_move is Color.WHITE:
-        return EvaluationResult(total=score, material=score)
-    return EvaluationResult(total=score, material=score)
+        return evaluation
+    return EvaluationResult(
+        total=-evaluation.total,
+        material=-evaluation.material,
+        mobility=-evaluation.mobility,
+        king_safety=-evaluation.king_safety,
+        pawn_structure=-evaluation.pawn_structure,
+        center_control=-evaluation.center_control,
+        piece_activity=-evaluation.piece_activity,
+    )
 
 
 def search_position(position: Position, config: SearchConfig) -> SearchResult:
@@ -37,17 +45,10 @@ def search_position(position: Position, config: SearchConfig) -> SearchResult:
     elapsed_ms = (perf_counter() - start) * 1000.0
     best_move = node_result.principal_variation[0] if node_result.principal_variation else None
 
-    root_eval = evaluate_position(position, config.evaluation_weights)
-    if position.side_to_move is Color.BLACK:
-        root_eval = EvaluationResult(
-            total=-root_eval.total,
-            material=-root_eval.material,
-            mobility=-root_eval.mobility,
-            king_safety=-root_eval.king_safety,
-            pawn_structure=-root_eval.pawn_structure,
-            center_control=-root_eval.center_control,
-            piece_activity=-root_eval.piece_activity,
-        )
+    root_eval = _to_side_to_move_pov(
+        position,
+        evaluate(position, config.evaluation_weights),
+    )
 
     stats = SearchStats(
         nodes=tracker.nodes,

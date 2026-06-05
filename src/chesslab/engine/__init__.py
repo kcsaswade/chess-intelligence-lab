@@ -2,7 +2,7 @@
 
 from chesslab.engine.attacks import is_in_check, is_square_attacked
 from chesslab.engine.castling import CastlingRights
-from chesslab.engine.eval.evaluator import evaluate_position
+from chesslab.engine.eval.evaluator import evaluate, evaluate_position
 from chesslab.engine.eval.result import EvaluationResult
 from chesslab.engine.eval.weights import EvaluationWeights
 from chesslab.engine.game_status import (
@@ -43,6 +43,7 @@ __all__ = [
     "SearchResult",
     "SearchStats",
     "divide",
+    "evaluate",
     "evaluate_position",
     "generate_legal_moves",
     "is_checkmate",

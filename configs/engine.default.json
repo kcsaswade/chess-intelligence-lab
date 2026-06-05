@@ -1,0 +1,14 @@
+{
+  "search": {
+    "depth": 3,
+    "use_alpha_beta": true
+  },
+  "evaluation_weights": {
+    "material": 100,
+    "mobility": 10,
+    "king_safety": 20,
+    "pawn_structure": 15,
+    "center_control": 10,
+    "piece_activity": 12
+  }
+}

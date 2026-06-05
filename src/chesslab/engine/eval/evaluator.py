@@ -1,58 +1,53 @@
-"""Minimal deterministic evaluator for Chunk 7."""
+"""Deterministic component-based evaluator for Chunk 8."""
 
 
 from __future__ import annotations
 
-from chesslab.constants import (
-    BISHOP_VALUE,
-    KING_VALUE,
-    KNIGHT_VALUE,
-    PAWN_VALUE,
-    QUEEN_VALUE,
-    ROOK_VALUE,
-)
+from chesslab.engine.eval.heuristics.center_control import center_control_balance
+from chesslab.engine.eval.heuristics.king_safety import king_safety_balance
+from chesslab.engine.eval.heuristics.material import material_balance
+from chesslab.engine.eval.heuristics.mobility import mobility_balance
+from chesslab.engine.eval.heuristics.pawn_structure import pawn_structure_balance
+from chesslab.engine.eval.heuristics.piece_activity import piece_activity_balance
 from chesslab.engine.eval.result import EvaluationResult
+from chesslab.engine.eval.scoring import build_evaluation_result, scale_component
 from chesslab.engine.eval.weights import EvaluationWeights
-from chesslab.engine.piece import Color, PieceType
 from chesslab.engine.position import Position
 
-_PIECE_VALUES = {
-    PieceType.PAWN: PAWN_VALUE,
-    PieceType.KNIGHT: KNIGHT_VALUE,
-    PieceType.BISHOP: BISHOP_VALUE,
-    PieceType.ROOK: ROOK_VALUE,
-    PieceType.QUEEN: QUEEN_VALUE,
-    PieceType.KING: KING_VALUE,
-}
 
+def evaluate(position: Position, weights: EvaluationWeights | None = None) -> EvaluationResult:
+    """Evaluate a position from White's perspective with component breakdown."""
+    effective_weights = weights or EvaluationWeights()
 
-def _material_balance(position: Position) -> int:
-    score = 0
-    for piece in position.board:
-        if piece is None:
-            continue
-        value = _PIECE_VALUES[piece.kind]
-        if piece.color is Color.WHITE:
-            score += value
-        else:
-            score -= value
-    return score
+    material = scale_component(material_balance(position), effective_weights.material)
+    mobility = scale_component(mobility_balance(position), effective_weights.mobility)
+    king_safety = scale_component(king_safety_balance(position), effective_weights.king_safety)
+    pawn_structure = scale_component(
+        pawn_structure_balance(position),
+        effective_weights.pawn_structure,
+    )
+    center_control = scale_component(
+        center_control_balance(position),
+        effective_weights.center_control,
+    )
+    piece_activity = scale_component(
+        piece_activity_balance(position),
+        effective_weights.piece_activity,
+    )
+
+    return build_evaluation_result(
+        material=material,
+        mobility=mobility,
+        king_safety=king_safety,
+        pawn_structure=pawn_structure,
+        center_control=center_control,
+        piece_activity=piece_activity,
+    )
 
 
 def evaluate_position(
     position: Position,
     weights: EvaluationWeights | None = None,
 ) -> EvaluationResult:
-    """Evaluate a position from White's perspective."""
-    effective_weights = weights or EvaluationWeights()
-    raw_material = _material_balance(position)
-    material_score = (raw_material * effective_weights.material) // 100
-    return EvaluationResult(
-        total=material_score,
-        material=material_score,
-        mobility=0,
-        king_safety=0,
-        pawn_structure=0,
-        center_control=0,
-        piece_activity=0,
-    )
+    """Backward-compatible alias for the public evaluator."""
+    return evaluate(position, weights)
