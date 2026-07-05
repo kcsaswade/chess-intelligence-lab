@@ -1,0 +1,10 @@
+[
+  {
+    "name": "promotion_push_all_choices",
+    "fen": "4k3/6P1/8/8/8/8/8/4K3 w - - 0 1"
+  },
+  {
+    "name": "promotion_capture_all_choices",
+    "fen": "1r2k3/P7/8/8/8/8/8/4K3 w - - 0 1"
+  }
+]

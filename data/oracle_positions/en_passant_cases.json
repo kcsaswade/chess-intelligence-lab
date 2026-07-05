@@ -1,0 +1,14 @@
+[
+  {
+    "name": "en_passant_available",
+    "fen": "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1"
+  },
+  {
+    "name": "en_passant_expired",
+    "fen": "4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1"
+  },
+  {
+    "name": "en_passant_illegal_due_to_exposure",
+    "fen": "4r1k1/8/8/3pP3/8/8/8/4K3 w - d6 0 1"
+  }
+]

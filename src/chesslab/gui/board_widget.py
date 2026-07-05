@@ -3,9 +3,8 @@
 
 from __future__ import annotations
 
-
 from PySide6.QtCore import QPoint, QRect, Qt, Signal
-from PySide6.QtGui import QColor, QMouseEvent, QPainter, QPen, QPaintEvent
+from PySide6.QtGui import QColor, QMouseEvent, QPainter, QPaintEvent, QPen
 from PySide6.QtWidgets import QSizePolicy, QWidget
 
 from chesslab.constants import (

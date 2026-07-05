@@ -1,0 +1,18 @@
+[
+  {
+    "name": "startpos",
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+  },
+  {
+    "name": "simple_development",
+    "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1"
+  },
+  {
+    "name": "pinned_piece",
+    "fen": "4k3/8/8/8/8/4q3/4R3/4K3 w - - 0 1"
+  },
+  {
+    "name": "in_check",
+    "fen": "4k3/8/8/8/8/8/4q3/4K3 w - - 0 1"
+  }
+]
